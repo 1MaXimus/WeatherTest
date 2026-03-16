@@ -15,7 +15,18 @@ final class WTViewController: UIViewController {
     private let viewModel = WTWeatherViewModel()
     private var cancellables = Set<AnyCancellable>()
 
-    // MARK: - UI Elements (те же, что и раньше)
+    // MARK: - UI Elements
+    private let refreshButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: UIImage(systemName: "arrow.clockwise"),
+            style: .plain,
+            target: nil,
+            action: nil
+        )
+        button.tintColor = .label
+        return button
+    }()
+
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
@@ -141,11 +152,14 @@ final class WTViewController: UIViewController {
         return stack
     }()
 
+
+
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupBindings()
+        setupNavigationBar()
         Task {
             await viewModel.loadData()
         }
@@ -182,7 +196,7 @@ final class WTViewController: UIViewController {
         contentView.addSubview(dailyTitleLabel)
         contentView.addSubview(dailyStackView)
 
-        retryButton.addTarget(self, action: #selector(retryTapped), for: .touchUpInside)
+        retryButton.addTarget(self, action: #selector(refreshTapped), for: .touchUpInside)
 
         setupConstraints()
     }
@@ -279,6 +293,12 @@ final class WTViewController: UIViewController {
             .store(in: &cancellables)
     }
 
+    private func setupNavigationBar() {
+        navigationItem.rightBarButtonItem = refreshButton
+        refreshButton.target = self
+        refreshButton.action = #selector(refreshTapped)
+    }
+
     // MARK: - Handlers
     private func handleStateChange(_ state: WTScreenState) {
         switch state {
@@ -329,9 +349,9 @@ final class WTViewController: UIViewController {
         }
     }
 
-    @objc private func retryTapped() {
+    @objc private func refreshTapped() {
         Task {
-            await viewModel.retry()
+            await viewModel.loadData()
         }
     }
 }

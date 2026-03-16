@@ -10,4 +10,5 @@ enum Constants {
     static let apiKey = "fa8b3df74d4042b9aa7135114252304"
     static let baseURL = "https://api.weatherapi.com/v1"
     static let forecastURL = "\(baseURL)/forecast.json?key=\(apiKey)&q=%f,%f&days=3"
+    static let coordinatesMoscow: WTCoordinates = (lat: 55.7558, lon: 37.6176)
 }

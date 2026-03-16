@@ -32,8 +32,8 @@ final class WTWeatherService {
     private let session = URLSession.shared
 
     // MARK: - Прогноз на 3 дня и текущая
-    func fetchForecast(lat: Double, lon: Double) async throws -> WTForecastResponse {
-        let urlString = String(format: Constants.forecastURL, lat, lon)
+    func fetchForecast(coordinates: WTCoordinates) async throws -> WTForecastResponse {
+        let urlString = String(format: Constants.forecastURL, coordinates.lat, coordinates.lon)
         return try await performRequest(urlString: urlString)
     }
 
@@ -51,7 +51,6 @@ final class WTWeatherService {
                 let result = try decoder.decode(T.self, from: data)
                 return result
             } catch {
-                print("Decoding error: \(error)")
                 throw WTWeatherError.decodingError
             }
         } catch {
@@ -61,7 +60,8 @@ final class WTWeatherService {
 
     // MARK: - Метод для города по умолчанию (Москва)
     func fetchMoscowWeather() async throws -> WTForecastResponse {
-        let urlString = String(format: Constants.forecastURL, 55.7558, 37.6176)
+        let coordinatesMoscow = Constants.coordinatesMoscow
+        let urlString = String(format: Constants.forecastURL, coordinatesMoscow.lat, coordinatesMoscow.lon)
         return try await performRequest(urlString: urlString)
     }
 }

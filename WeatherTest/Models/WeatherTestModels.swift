@@ -7,12 +7,6 @@
 
 import Foundation
 
-// MARK: - Текущая погода (current.json)
-struct WTResponse: Codable {
-    let location: WTLocation
-    let current: WTCurrent
-}
-
 // MARK: - Прогноз (forecast.json?days=3)
 struct WTForecastResponse: Codable {
     let location: WTLocation
@@ -25,7 +19,7 @@ struct WTLocation: Codable {
     let name: String
     let region: String
     let country: String
-    let localtime: String // Нам понадобится для определения текущего часа
+    let localtime: String
 }
 
 // MARK: - Current (общая структура)

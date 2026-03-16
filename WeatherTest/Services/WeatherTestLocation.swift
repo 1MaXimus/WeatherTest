@@ -8,6 +8,8 @@
 import Foundation
 import CoreLocation
 
+typealias WTCoordinates = (lat: Double, lon: Double)
+
 enum WTLocationError: Error {
     case permissionDenied
     case locationNotFound
@@ -37,7 +39,7 @@ final class WTLocationManager: NSObject {
     }
 
     // MARK: - Public Methods
-    func requestLocation() async throws -> (lat: Double, lon: Double) {
+    func requestLocation() async throws -> WTCoordinates {
 
         // Проверяем статус авторизации
         let status = manager.authorizationStatus
@@ -71,8 +73,8 @@ final class WTLocationManager: NSObject {
         }
     }
 
-    func getMoscowLocation() -> (lat: Double, lon: Double) {
-        return (55.7558, 37.6176)
+    func getMoscowLocation() -> WTCoordinates {
+        return Constants.coordinatesMoscow
     }
 }
 

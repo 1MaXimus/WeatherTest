@@ -57,8 +57,7 @@ final class WTWeatherViewModel {
 
             // Запрашиваем прогноз - город придет в ответе от API
             let response = try await weatherService.fetchForecast(
-                lat: location.lat,
-                lon: location.lon
+                coordinates: location
             )
 
             self.forecastResponse = response
@@ -73,10 +72,6 @@ final class WTWeatherViewModel {
         } catch {
             state = .error(String(localized: "Unknown error"))
         }
-    }
-
-    func retry() async {
-        await loadData()
     }
 
     // MARK: - Private Methods
